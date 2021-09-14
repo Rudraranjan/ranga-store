@@ -28,10 +28,25 @@ const showProducts = (products) => {
   }
 };
 // Show Details Button fuction here 
-showDetailsButton = (id) =>{  
+const showDetailsButton = (id) =>{  
   fetch(`https://fakestoreapi.com/products/${id}`)
             .then(res=>res.json())
-            .then(data=>console.log(data))            
+            .then(data=>appendSingleProduct(data))            
+}
+
+const appendSingleProduct = (item) =>{
+  const appendDiv = document.getElementById('single-products');
+  appendDiv.innerText ='';
+  const div = document.createElement("div");
+    div.classList.add("product");
+    div.innerHTML = `<div class="single-product">
+      <div>
+    <img class="product-image" src=${item.image}></img>
+      </div>
+      <h3>${item.title}</h3>
+      <p>Category: ${item.category}</p>
+      <h2>Price: $ ${item.price}</h2>`;
+     appendDiv.appendChild(div);
 }
 
 
@@ -42,11 +57,12 @@ const addToCart = (id, price) => {
 
   updateTaxAndCharge();
   document.getElementById("total-Products").innerText = count;
+  updateTotal();
 };
 
 const getInputValue = (id) => {
   const element = document.getElementById(id).innerText;
-  const converted = parseInt(element);
+  const converted = parseFloat(element);  
   return converted;
 };
 
@@ -82,10 +98,9 @@ const updateTaxAndCharge = () => {
 
 //grandTotal update function
 const updateTotal = () => { 
-  const grandTotal =
+  const grandTotal =  
     getInputValue("price") + getInputValue("delivery-charge") +
-    getInputValue("total-tax");
-   
-  document.getElementById("total").innerText = grandTotal;
+    getInputValue("total-tax");   
+    document.getElementById("total").innerText = grandTotal;
 };
 loadProducts();
